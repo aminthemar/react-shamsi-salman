@@ -24,16 +24,6 @@ const YearsBody = ({
   const [domNode, setDomNode] = useState<HTMLButtonElement | null>(null);
   const currentYearRef = useCallback(setDomNode, []);
 
-  useEffect(() => {
-    if (domNode) {
-      domNode.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
-      });
-    }
-  }, [domNode]);
-
   const otherYearsRef = useRef<HTMLButtonElement>(null);
   return (
     <div className="grid grid-cols-3 gap-4 max-h-72 overflow-y-scroll custom-scroll">
