@@ -17,6 +17,7 @@ interface IMainBodyProps {
   minDate?: Date;
   maxDate?: Date;
   onActiveDayChange: (newDay: Date) => void;
+  onDaySelected: (flag: Boolean) => void;
   themeClasses: TThemeClasses;
   selectedDate: Date;
   activeDate: Date;
@@ -39,6 +40,7 @@ const MainBody = ({
   maxDate,
   minDate,
   onActiveDayChange,
+  onDaySelected,
   highlightToday,
   disabledDates,
   themeClasses,
@@ -97,7 +99,10 @@ const MainBody = ({
           return (
             <button
               disabled={isDateInvalid}
-              onClick={onActiveDayChange.bind(this, day)}
+              onClick={() => {
+                onActiveDayChange.bind(this, day);
+                onDaySelected(true);
+              }}
               key={day.toString()}
               style={{
                 color: textColor(),

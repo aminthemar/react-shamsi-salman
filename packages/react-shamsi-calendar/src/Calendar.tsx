@@ -168,6 +168,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
       getInitialDate(defaultActiveDate, propActiveDate, minDate)
     );
     const [selectedDate, setSelectedDate] = useState(activeDate);
+    const [selectedDateTrigger, setSelectedDateTrigger] = useState(false);
     const [activeBody, setActiveBody] = useState<"main" | "months" | "years">(
       "main"
     );
@@ -337,6 +338,10 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
         throw new Error("طول آرایه ماه های وارد شده، می بایست 12 باشد.");
     }, [months]);
 
+    useEffect(() => {
+      if (selectedDateTrigger) onConfirm?.(activeDate);
+    }, [activeDate,selectedDate, selectedDateTrigger]);
+
     const Body = useMemo(() => {
       return activeBody === "main" ? (
         <MainBody
@@ -350,6 +355,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
           maxDate={maxDate}
           minDate={minDate}
           onActiveDayChange={activeDayChangeHandler}
+          onDaySelected={(flag)=>setSelectedDateTrigger(flag)}
           selectedDate={selectedDate}
           themeClasses={themeClasses}
           showFridaysAsRed={showFridaysAsRed}
