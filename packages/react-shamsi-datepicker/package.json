@@ -1,5 +1,5 @@
 {
-  "name": "@react-shamsi/datepicker",
+  "name": "@react-shamsi-salmanfood/datepicker",
   "version": "0.1.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -35,11 +35,14 @@
     "@floating-ui/react-dom-interactions": "^0.10.2",
     "@mantine/hooks": "^5.6.2",
     "@react-shamsi/calendar": "*",
+    "@react-shamsi-salmanfood/calendar": "*",
     "classnames": "^2.3.2",
     "date-fns-jalali": "^2.29.3-0",
     "persian-helpers": "^0.1.2"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "description": "Let's start by displaying a very simple Jalali date picker using react-jalali. We do it by import the styles and the component itself like so:",
+  "author": ""
 }

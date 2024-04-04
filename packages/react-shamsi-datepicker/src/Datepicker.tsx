@@ -1,12 +1,7 @@
-import {
-  autoUpdate as floatingUiAutoUpdate,
-  flip,
-  shift,
-  useFloating,
-} from "@floating-ui/react-dom";
+import { autoUpdate as floatingUiAutoUpdate, flip, shift, useFloating } from "@floating-ui/react-dom";
 import { FloatingPortal } from "@floating-ui/react-dom-interactions";
 import { useClickOutside } from "@mantine/hooks";
-import { Calendar, ICalendarProps } from "@react-shamsi/calendar";
+import { Calendar, ICalendarProps } from "@react-shamsi-salmanfood/calendar";
 import { format } from "date-fns-jalali";
 import { convertDigits } from "persian-helpers";
 import { useEffect, useState } from "react";
@@ -15,9 +10,7 @@ interface DatePickerOnChange {
   onChange?: (newDate: Date) => void;
 }
 
-interface IDatePickerProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">,
-    DatePickerOnChange {
+interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">, DatePickerOnChange {
   autoUpdate?: boolean;
   defaultDate?: Date;
   calendarProps?: ICalendarProps;
@@ -107,18 +100,14 @@ export const DatePicker = ({
           }
           readOnly
           onClick={(event) => {
-            setIsOpen((previousIsOpen) =>
-              previousIsOpen === false ? true : previousIsOpen
-            );
+            setIsOpen((previousIsOpen) => (previousIsOpen === false ? true : previousIsOpen));
             props.onClick?.(event);
           }}
           {...props}
         />
       </div>
       {calendarPortalElement ? (
-        <FloatingPortal root={calendarPortalElement}>
-          {isOpen && CalendarComponent}
-        </FloatingPortal>
+        <FloatingPortal root={calendarPortalElement}>{isOpen && CalendarComponent}</FloatingPortal>
       ) : (
         isOpen && CalendarComponent
       )}
