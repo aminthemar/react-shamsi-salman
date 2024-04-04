@@ -1,5 +1,5 @@
 {
-  "name": "@react-shamsi/calendar",
+  "name": "@react-shamsi-salmanfood/calendar",
   "version": "0.1.1",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -40,5 +40,7 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "description": "Let's start by displaying a very simple Jalali calendar using react-shamsi. We do it by import the styles and the component itself like so:",
+  "author": ""
 }
