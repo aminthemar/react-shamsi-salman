@@ -1,13 +1,5 @@
 import classNames from "classnames";
-import {
-  getDate,
-  isAfter,
-  isBefore,
-  isFriday,
-  isSameDay,
-  isSameMonth,
-  isToday,
-} from "date-fns-jalali";
+import { getDate, isAfter, isBefore, isFriday, isSameDay, isSameMonth, isToday } from "date-fns-jalali";
 import { convertDigits } from "persian-helpers";
 import { useMemo } from "react";
 import { TThemeClasses } from ".";
@@ -17,6 +9,7 @@ interface IMainBodyProps {
   minDate?: Date;
   maxDate?: Date;
   onActiveDayChange: (newDay: Date) => void;
+  onDaySelected: (flag: Boolean) => void;
   themeClasses: TThemeClasses;
   selectedDate: Date;
   activeDate: Date;
@@ -25,20 +18,13 @@ interface IMainBodyProps {
   showFridaysAsRed?: boolean;
 }
 
-const daysOfTheWeek = [
-  "شنبه",
-  "یک‌شنبه",
-  "دوشنبه",
-  "سه‌شنبه",
-  "چهار‌شنبه",
-  "پنج‌شنبه",
-  "جمعه",
-];
+const daysOfTheWeek = ["شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهار‌شنبه", "پنج‌شنبه", "جمعه"];
 
 const MainBody = ({
   maxDate,
   minDate,
   onActiveDayChange,
+  onDaySelected,
   highlightToday,
   disabledDates,
   themeClasses,
@@ -46,10 +32,7 @@ const MainBody = ({
   selectedDate,
   showFridaysAsRed,
 }: IMainBodyProps) => {
-  const selectedDateDays = useMemo(
-    () => getDates(selectedDate),
-    [selectedDate]
-  );
+  const selectedDateDays = useMemo(() => getDates(selectedDate), [selectedDate]);
 
   return (
     <>
@@ -61,9 +44,7 @@ const MainBody = ({
               color: themeClasses.weekDaysTextColor,
               backgroundColor: themeClasses.weekDaysBackgroundColor,
             }}
-            className={classNames(
-              "m-0 text-sm rounded-full p-2 w-9 h-9 text-center border border-transparent"
-            )}
+            className={classNames("m-0 text-sm rounded-full p-2 w-9 h-9 text-center border border-transparent")}
             aria-label={daysOfTheWeek[index]}
             title={daysOfTheWeek[index]}
           >
@@ -80,11 +61,8 @@ const MainBody = ({
 
           const textColor = () => {
             if (showFridaysAsRed && isFriday(day))
-              return isSameDay(day, activeDate)
-                ? themeClasses.offDaysSelectedColor
-                : themeClasses.offDaysColor;
-            if (isSameDay(day, activeDate))
-              return themeClasses.daysSelectedColor;
+              return isSameDay(day, activeDate) ? themeClasses.offDaysSelectedColor : themeClasses.offDaysColor;
+            if (isSameDay(day, activeDate)) return themeClasses.daysSelectedColor;
             return themeClasses.daysColor;
           };
 
@@ -97,20 +75,19 @@ const MainBody = ({
           return (
             <button
               disabled={isDateInvalid}
-              onClick={onActiveDayChange.bind(this, day)}
+              onClick={() => {
+                onActiveDayChange.bind(this, day);
+                onDaySelected(true);
+              }}
               key={day.toString()}
               style={{
                 color: textColor(),
                 backgroundColor: backgroundColor(),
-                borderColor:
-                  isToday(day) && highlightToday
-                    ? themeClasses.todayBorderColor
-                    : "transparent",
+                borderColor: isToday(day) && highlightToday ? themeClasses.todayBorderColor : "transparent",
               }}
               className={classNames(
                 "text-sm w-9 h-9 rounded-full text-center border m-0",
-                (!isSameMonth(day, selectedDate) || isDateInvalid) &&
-                  "opacity-50"
+                (!isSameMonth(day, selectedDate) || isDateInvalid) && "opacity-50"
               )}
             >
               {convertDigits(getDate(day))}

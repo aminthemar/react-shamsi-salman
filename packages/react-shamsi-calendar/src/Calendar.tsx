@@ -1,18 +1,7 @@
-import {
-  defaultTimePickerTheme,
-  TimePicker,
-  TTimePickerTheme,
-} from "@react-shamsi/timepicker";
+import { defaultTimePickerTheme, TimePicker, TTimePickerTheme } from "@react-shamsi/timepicker";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import classNames from "classnames";
-import {
-  addMonths,
-  format,
-  getMonth,
-  setMonth,
-  setYear,
-  subMonths,
-} from "date-fns-jalali";
+import { addMonths, format, getMonth, setMonth, setYear, subMonths } from "date-fns-jalali";
 import { convertDigits } from "persian-helpers";
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { SwitchTransition, Transition } from "react-transition-group";
@@ -94,9 +83,7 @@ const FadeTransition = ({ children, bodyTransition, ...rest }: any) => (
       return (
         <div
           className={classNames(
-            state === "exiting" || state === "entering"
-              ? "absolute top-0"
-              : "relative",
+            state === "exiting" || state === "entering" ? "absolute top-0" : "relative",
             state === "entered" ? transitionClass.in : transitionClass.out,
             state === "exited" ? "hidden" : "block",
             "transition-all ease-in-out w-full h-full flex flex-col space-y-4"
@@ -109,11 +96,7 @@ const FadeTransition = ({ children, bodyTransition, ...rest }: any) => (
   </Transition>
 );
 
-const getInitialDate = (
-  defaultActiveDate?: Date,
-  propActiveDate?: Date,
-  minDate?: Date
-) => {
+const getInitialDate = (defaultActiveDate?: Date, propActiveDate?: Date, minDate?: Date) => {
   if (defaultActiveDate) return defaultActiveDate;
   if (propActiveDate) return propActiveDate;
   if (minDate) {
@@ -145,39 +128,19 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
       showFridaysAsRed = true,
       showTimePicker = true,
       presistTimeOnDateChange = false,
-      months = [
-        "فروردین",
-        "اردیبهشت",
-        "خرداد",
-        "تیر",
-        "مرداد",
-        "شهریور",
-        "مهر",
-        "آبان",
-        "آذر",
-        "دی",
-        "بهمن",
-        "اسفند",
-      ],
+      months = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"],
       onCancel,
       onConfirm,
     },
     ref
   ) => {
-    const [activeDate, setActiveDate] = useState(
-      getInitialDate(defaultActiveDate, propActiveDate, minDate)
-    );
+    const [activeDate, setActiveDate] = useState(getInitialDate(defaultActiveDate, propActiveDate, minDate));
     const [selectedDate, setSelectedDate] = useState(activeDate);
-    const [activeBody, setActiveBody] = useState<"main" | "months" | "years">(
-      "main"
-    );
+    const [selectedDateTrigger, setSelectedDateTrigger] = useState<Boolean>(false);
+    const [activeBody, setActiveBody] = useState<"main" | "months" | "years">("main");
     const [mode, setMode] = useState<CalendarModes>("date");
-    const [hour, setHour] = useState(
-      propActiveDate?.getHours() || defaultActiveDate?.getHours() || 0
-    );
-    const [minute, setMinute] = useState(
-      propActiveDate?.getMinutes() || defaultActiveDate?.getMinutes() || 0
-    );
+    const [hour, setHour] = useState(propActiveDate?.getHours() || defaultActiveDate?.getHours() || 0);
+    const [minute, setMinute] = useState(propActiveDate?.getMinutes() || defaultActiveDate?.getMinutes() || 0);
 
     useEffect(() => {
       if (propActiveDate) setActiveDate(activeDate);
@@ -333,9 +296,12 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
     }, [theme]);
 
     useEffect(() => {
-      if (months.length !== 12)
-        throw new Error("طول آرایه ماه های وارد شده، می بایست 12 باشد.");
+      if (months.length !== 12) throw new Error("طول آرایه ماه های وارد شده، می بایست 12 باشد.");
     }, [months]);
+
+    useEffect(() => {
+      if (selectedDateTrigger) onConfirm?.(activeDate);
+    }, [activeDate, selectedDate, selectedDateTrigger]);
 
     const Body = useMemo(() => {
       return activeBody === "main" ? (
@@ -350,6 +316,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
           maxDate={maxDate}
           minDate={minDate}
           onActiveDayChange={activeDayChangeHandler}
+          onDaySelected={(flag) => setSelectedDateTrigger(flag)}
           selectedDate={selectedDate}
           themeClasses={themeClasses}
           showFridaysAsRed={showFridaysAsRed}
@@ -401,10 +368,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
             className={classNames("p-4 flex flex-col items-center space-y-6")}
           >
             <div className="flex items-center justify-between text-gray-500 w-full">
-              <button
-                onClick={previousMonthHandler}
-                style={{ color: themeClasses.chevronRightColor }}
-              >
+              <button onClick={previousMonthHandler} style={{ color: themeClasses.chevronRightColor }}>
                 <IconChevronRight className="w-4 h-4" />
               </button>
               <button
@@ -412,13 +376,9 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
                 onClick={cycleThroughBodies}
                 style={{ color: themeClasses.topBarTextColor }}
               >
-                {activeBody === "main" && months[getMonth(selectedDate)]}{" "}
-                {convertDigits(format(selectedDate, "yyyy"))}
+                {activeBody === "main" && months[getMonth(selectedDate)]} {convertDigits(format(selectedDate, "yyyy"))}
               </button>
-              <button
-                onClick={nextMonthHandler}
-                style={{ color: themeClasses.chevronLeftColor }}
-              >
+              <button onClick={nextMonthHandler} style={{ color: themeClasses.chevronLeftColor }}>
                 <IconChevronLeft className="w-4 h-4" />
               </button>
             </div>
