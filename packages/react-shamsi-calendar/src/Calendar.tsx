@@ -136,7 +136,6 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
   ) => {
     const [activeDate, setActiveDate] = useState(getInitialDate(defaultActiveDate, propActiveDate, minDate));
     const [selectedDate, setSelectedDate] = useState(activeDate);
-    const [selectedDateTrigger, setSelectedDateTrigger] = useState<Boolean>(false);
     const [activeBody, setActiveBody] = useState<"main" | "months" | "years">("main");
     const [mode, setMode] = useState<CalendarModes>("date");
     const [hour, setHour] = useState(propActiveDate?.getHours() || defaultActiveDate?.getHours() || 0);
@@ -160,6 +159,9 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
         dayCopy.setHours(hour, minute, 0, 0);
       } else dayCopy.setHours(0, 0, 0);
       setActiveDate(dayCopy);
+      setTimeout(() => {
+        onConfirm?.(dayCopy);
+      }, 150);
     };
 
     const goToTodayHandler = () => {
@@ -299,10 +301,6 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
       if (months.length !== 12) throw new Error("طول آرایه ماه های وارد شده، می بایست 12 باشد.");
     }, [months]);
 
-    useEffect(() => {
-      if (selectedDateTrigger) onConfirm?.(activeDate);
-    }, [activeDate, selectedDate, selectedDateTrigger]);
-
     const Body = useMemo(() => {
       return activeBody === "main" ? (
         <MainBody
@@ -316,37 +314,16 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
           maxDate={maxDate}
           minDate={minDate}
           onActiveDayChange={activeDayChangeHandler}
-          onDaySelected={(flag) => setSelectedDateTrigger(flag)}
           selectedDate={selectedDate}
           themeClasses={themeClasses}
           showFridaysAsRed={showFridaysAsRed}
         />
       ) : activeBody === "months" ? (
-        <MonthsBody
-          themeClasses={themeClasses}
-          onChangeMonth={monthChangeHandler}
-          selectedDate={selectedDate}
-          months={months}
-        />
+        <MonthsBody themeClasses={themeClasses} onChangeMonth={monthChangeHandler} selectedDate={selectedDate} months={months} />
       ) : (
-        <YearsBody
-          themeClasses={themeClasses}
-          onChangeYear={yearChangeHandler}
-          activeDate={activeDate}
-          selectedDate={selectedDate}
-        />
+        <YearsBody themeClasses={themeClasses} onChangeYear={yearChangeHandler} activeDate={activeDate} selectedDate={selectedDate} />
       );
-    }, [
-      activeBody,
-      activeDate,
-      disabledDates,
-      highlightToday,
-      maxDate,
-      minDate,
-      activeDayChangeHandler,
-      selectedDate,
-      themeClasses,
-    ]);
+    }, [activeBody, activeDate, disabledDates, highlightToday, maxDate, minDate, activeDayChangeHandler, selectedDate, themeClasses]);
     return (
       <div
         ref={ref}
@@ -363,19 +340,12 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
           themeClasses={themeClasses}
         />
         {mode === "date" ? (
-          <div
-            style={{ backgroundColor: themeClasses.bodyBackgroundColor }}
-            className={classNames("p-4 flex flex-col items-center space-y-6")}
-          >
+          <div style={{ backgroundColor: themeClasses.bodyBackgroundColor }} className={classNames("p-4 flex flex-col items-center space-y-6")}>
             <div className="flex items-center justify-between text-gray-500 w-full">
               <button onClick={previousMonthHandler} style={{ color: themeClasses.chevronRightColor }}>
                 <IconChevronRight className="w-4 h-4" />
               </button>
-              <button
-                className="text-base"
-                onClick={cycleThroughBodies}
-                style={{ color: themeClasses.topBarTextColor }}
-              >
+              <button className="text-base" onClick={cycleThroughBodies} style={{ color: themeClasses.topBarTextColor }}>
                 {activeBody === "main" && months[getMonth(selectedDate)]} {convertDigits(format(selectedDate, "yyyy"))}
               </button>
               <button onClick={nextMonthHandler} style={{ color: themeClasses.chevronLeftColor }}>
@@ -387,13 +357,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
             ) : (
               <div className="relative">
                 <SwitchTransition mode="in-out">
-                  <FadeTransition
-                    bodyTransition={bodyTransition}
-                    key={activeBody}
-                    timeout={200}
-                    unmountOnExit
-                    mountOnEnter
-                  >
+                  <FadeTransition bodyTransition={bodyTransition} key={activeBody} timeout={200} unmountOnExit mountOnEnter>
                     {Body}
                   </FadeTransition>
                 </SwitchTransition>

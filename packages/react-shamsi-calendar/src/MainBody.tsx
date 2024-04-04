@@ -9,7 +9,6 @@ interface IMainBodyProps {
   minDate?: Date;
   maxDate?: Date;
   onActiveDayChange: (newDay: Date) => void;
-  onDaySelected: (flag: Boolean) => void;
   themeClasses: TThemeClasses;
   selectedDate: Date;
   activeDate: Date;
@@ -24,7 +23,6 @@ const MainBody = ({
   maxDate,
   minDate,
   onActiveDayChange,
-  onDaySelected,
   highlightToday,
   disabledDates,
   themeClasses,
@@ -60,25 +58,19 @@ const MainBody = ({
             disabledDates?.includes(day);
 
           const textColor = () => {
-            if (showFridaysAsRed && isFriday(day))
-              return isSameDay(day, activeDate) ? themeClasses.offDaysSelectedColor : themeClasses.offDaysColor;
+            if (showFridaysAsRed && isFriday(day)) return isSameDay(day, activeDate) ? themeClasses.offDaysSelectedColor : themeClasses.offDaysColor;
             if (isSameDay(day, activeDate)) return themeClasses.daysSelectedColor;
             return themeClasses.daysColor;
           };
 
           const backgroundColor = () => {
-            return isSameDay(day, activeDate)
-              ? themeClasses.daysSelectedBackgroundColor
-              : themeClasses.daysBackgroundColor;
+            return isSameDay(day, activeDate) ? themeClasses.daysSelectedBackgroundColor : themeClasses.daysBackgroundColor;
           };
 
           return (
             <button
               disabled={isDateInvalid}
-              onClick={() => {
-                onActiveDayChange.bind(this, day);
-                onDaySelected(true);
-              }}
+              onClick={onActiveDayChange.bind(this, day)}
               key={day.toString()}
               style={{
                 color: textColor(),

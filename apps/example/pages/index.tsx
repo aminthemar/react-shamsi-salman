@@ -1,4 +1,4 @@
-import { DatePicker } from "@react-shamsi/datepicker";
+import { DatePicker } from "../../../packages/react-shamsi-datepicker/dist/index";
 import { useEffect, useMemo, useState } from "react";
 
 const getTodayWithoutHours = () => {
@@ -19,14 +19,11 @@ const NewHomework = () => {
     if (!minDate) return undefined;
     const minDateClone = new Date(minDate);
     minDateClone.setDate(minDate.getDate() + 1);
-    console.log("minDate", minDateClone);
     return minDateClone;
   }, [minDate]);
 
   useEffect(() => {
-    console.log("minDateUseEffect", minDate);
-    if (minDatePlusOne && maxDate && minDate && maxDate <= minDate)
-      setMaxDate(minDatePlusOne);
+    if (minDatePlusOne && maxDate && minDate && maxDate <= minDate) setMaxDate(minDatePlusOne);
   }, [minDate]);
 
   const [maxDate, setMaxDate] = useState<Date>();
