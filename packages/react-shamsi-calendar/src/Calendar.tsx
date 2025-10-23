@@ -1,5 +1,14 @@
 import { defaultTimePickerTheme, TimePicker, TTimePickerTheme } from "@react-shamsi/timepicker";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
+import {
+  IconCaretUp,
+  IconChartArrowsVertical,
+  IconChevronLeft,
+  IconChevronRight,
+  IconElevator,
+  IconSelector,
+  IconSortAscending,
+  IconSwitchVertical,
+} from "@tabler/icons";
 import classNames from "classnames";
 import { addMonths, format, getMonth, setMonth, setYear, subMonths } from "date-fns-jalali";
 import { convertDigits } from "persian-helpers";
@@ -325,12 +334,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
       );
     }, [activeBody, activeDate, disabledDates, highlightToday, maxDate, minDate, activeDayChangeHandler, selectedDate, themeClasses]);
     return (
-      <div
-        ref={ref}
-        style={{ fontFamily: "Vazirmatn", ...style }}
-        className="flex flex-col rounded-md shadow-lg max-w-[22rem] overflow-hidden"
-        dir="rtl"
-      >
+      <div ref={ref} style={{ fontFamily: "Vazir", ...style }} className="flex flex-col rounded-md shadow-lg max-w-[22rem] overflow-hidden" dir="rtl">
         <Header
           activeDate={activeDate}
           selectedDate={selectedDate}
@@ -345,8 +349,19 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
               <button onClick={previousMonthHandler} style={{ color: themeClasses.chevronRightColor }}>
                 <IconChevronRight className="w-4 h-4" />
               </button>
-              <button className="text-base" onClick={cycleThroughBodies} style={{ color: themeClasses.topBarTextColor }}>
-                {activeBody === "main" && months[getMonth(selectedDate)]} {convertDigits(format(selectedDate, "yyyy"))}
+              <button className="text-base flex items-center" onClick={cycleThroughBodies} style={{ gap: "0.875rem", color: themeClasses.topBarTextColor }}>
+                <p>
+                  {activeBody === "main" && months[getMonth(selectedDate)]} {convertDigits(format(selectedDate, "yyyy"))}
+                </p>
+                <IconSwitchVertical
+                  className="rounded w-4 h-4"
+                  style={{
+                    backgroundColor: `${themeClasses.footerButtonColor}12`,
+                    padding: "2px",
+                    borderColor: themeClasses.footerButtonColor,
+                    color: themeClasses.footerButtonColor,
+                  }}
+                />
               </button>
               <button onClick={nextMonthHandler} style={{ color: themeClasses.chevronLeftColor }}>
                 <IconChevronLeft className="w-4 h-4" />
