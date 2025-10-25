@@ -55,6 +55,7 @@ const NewHomework = () => {
         }}
         date={maxDate}
         onChange={setMaxDate}
+        calendarModal
         autoUpdate
         persianDigits
       />
