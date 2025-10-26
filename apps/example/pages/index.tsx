@@ -1,16 +1,27 @@
-import { DatePicker } from "../../../packages/react-shamsi-datepicker/dist/index";
+import { defaultTimePickerTheme } from "@react-shamsi/timepicker";
 import { useEffect, useMemo, useState } from "react";
+import { DatePicker } from "../../../packages/react-shamsi-datepicker/dist/index";
 
-const getTodayWithoutHours = () => {
-  const today = new Date();
-  today.setHours(0, 0, 0);
-  return today;
-};
-
-const getNowWithoutHours = () => {
-  const today = new Date();
-  today.setHours(0, 0, 0);
-  return today;
+const primaryColor = "#333";
+const theme = {
+  bodyBackgroundColor: "#fff",
+  chevronLeftColor: "#6b7280",
+  chevronRightColor: "#6b7280",
+  topBarTextColor: "#6b7280",
+  weekDaysBackgroundColor: "#f3f4f6",
+  weekDaysTextColor: "#9ca3af",
+  daysBackgroundColor: "transparent",
+  daysSelectedBackgroundColor: primaryColor,
+  todayBorderColor: primaryColor,
+  daysSelectedColor: "#fff",
+  daysColor: "#000",
+  footerBackgroundColor: "#f1f5f9",
+  footerButtonColor: primaryColor,
+  headerBackgroundColor: primaryColor,
+  headerTextColor: "#fff",
+  offDaysColor: primaryColor,
+  offDaysSelectedColor: "#fff",
+  clock: defaultTimePickerTheme,
 };
 
 const NewHomework = () => {
@@ -23,42 +34,86 @@ const NewHomework = () => {
   }, [minDate]);
 
   useEffect(() => {
-    if (minDatePlusOne && maxDate && minDate && maxDate <= minDate) setMaxDate(minDatePlusOne);
+    if (minDatePlusOne && inputDate && minDate && inputDate <= minDate) setInputDate(minDatePlusOne);
   }, [minDate]);
 
-  const [maxDate, setMaxDate] = useState<Date>();
+  const [inputDate, setInputDate] = useState<Date>();
 
   return (
-    <div style={{ padding: "20px" }}>
-      {/* <Calendar showFooter /> */}
-      <DatePicker
-        className="w-full lg:w-auto p-2 rounded-xl border border-gray-300"
-        placeholder="تاریخ شروع"
-        calendarProps={{
-          minDate: getTodayWithoutHours(),
-          presistTimeOnDateChange: true,
-          theme: "darkRed",
-          defaultActiveDate: minDate || getNowWithoutHours(),
-        }}
-        onChange={setMinDate}
-        autoUpdate
-        persianDigits
-      />
-      <h1 className="text-lg hidden lg:block">تا</h1>
-      <DatePicker
-        className="w-full lg:w-auto p-2 rounded-xl border border-gray-300"
-        placeholder="تاریخ پایان"
-        calendarProps={{
-          minDate: minDatePlusOne || getTodayWithoutHours(),
-          showTimePicker: false,
-          presistTimeOnDateChange: true,
-        }}
-        date={maxDate}
-        onChange={setMaxDate}
-        calendarModal
-        autoUpdate
-        persianDigits
-      />
+    <div style={{ display: "flex", flexDirection: "column", gap: "1rem", padding: "2rem", direction: "rtl", minHeight: "100vh" }}>
+      {/* SMALL DATEPICKER */}
+      <div style={{ width: "200px" }}>
+        <DatePicker
+          autoUpdate
+          dateFormat="yyyy/MM/dd"
+          className="w-full p-2 border rounded border-gray-300"
+          date={inputDate}
+          onChange={setInputDate}
+          placeholder="تاریخ کوچک"
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          calendarProps={{
+            minDate: minDate,
+            showTimePicker: false,
+            theme: theme,
+          }}
+        />
+      </div>
+      {/* SMALL DATEPICKER */}
+      {/* LARGE DATEPICKER */}
+      <div style={{ width: "400px" }}>
+        <DatePicker
+          autoUpdate
+          dateFormat="yyyy/MM/dd"
+          className="w-full p-2 border rounded border-gray-300"
+          date={inputDate}
+          onChange={setInputDate}
+          placeholder="تاریخ بزرگ"
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          calendarProps={{
+            minDate: minDate,
+            showTimePicker: false,
+            theme: theme,
+          }}
+        />
+      </div>
+      {/* LARGE DATEPICKER */}
+      {/* MODAL DATEPICKER */}
+      <div style={{ width: "50%" }}>
+        <DatePicker
+          autoUpdate
+          dateFormat="yyyy/MM/dd"
+          className="w-full p-2 border rounded border-gray-300"
+          date={inputDate}
+          onChange={setInputDate}
+          placeholder="تاریخ مودال"
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          calendarProps={{
+            minDate: minDate,
+            showTimePicker: false,
+            theme: theme,
+          }}
+          calendarModal
+        />
+      </div>
+      {/* MODAL DATEPICKER */}
+      {/* FULL WIDTH DATEPICKER */}
+      <div style={{ width: "100%" }}>
+        <DatePicker
+          autoUpdate
+          dateFormat="yyyy/MM/dd"
+          className="w-full p-2 border rounded border-gray-300"
+          date={inputDate}
+          onChange={setInputDate}
+          placeholder="تاریخ تمام عرض"
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          calendarProps={{
+            minDate: minDate,
+            showTimePicker: false,
+            theme: theme,
+          }}
+        />
+      </div>
+      {/* FULL WIDTH DATEPICKER */}
     </div>
   );
 };

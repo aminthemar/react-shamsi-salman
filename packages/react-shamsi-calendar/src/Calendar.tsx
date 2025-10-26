@@ -334,7 +334,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
       );
     }, [activeBody, activeDate, disabledDates, highlightToday, maxDate, minDate, activeDayChangeHandler, selectedDate, themeClasses]);
     return (
-      <div ref={ref} style={{ fontFamily: "Vazir", ...style }} className="flex flex-col rounded-md shadow-lg max-w-[22rem] overflow-hidden" dir="rtl">
+      <div ref={ref} style={{ fontFamily: "Vazirmatn FD", ...style }} className="flex flex-col rounded-md shadow-lg overflow-hidden" dir="rtl">
         <Header
           activeDate={activeDate}
           selectedDate={selectedDate}
@@ -356,7 +356,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
                 <IconSwitchVertical
                   className="rounded w-4 h-4"
                   style={{
-                    backgroundColor: `${themeClasses.footerButtonColor}12`,
+                    backgroundColor: "#f3f4f6",
                     padding: "2px",
                     borderColor: themeClasses.footerButtonColor,
                     color: themeClasses.footerButtonColor,

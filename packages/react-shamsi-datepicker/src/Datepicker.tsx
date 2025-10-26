@@ -15,6 +15,7 @@ interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   defaultDate?: Date;
   calendarProps?: ICalendarProps;
   date?: Date;
+  placeholder?: string;
   dateFormat?: string;
   persianDigits?: boolean;
   calendarModal?: boolean;
@@ -27,6 +28,7 @@ export const DatePicker = ({
   defaultDate,
   dateFormat = "yyyy/MM/dd hh:mm:ss aaa",
   date: controlledDate,
+  placeholder = "",
   persianDigits,
   calendarModal = false,
   ...props
@@ -64,6 +66,11 @@ export const DatePicker = ({
     transition: "opacity 0.15s ease-in-out, transform 0.15s ease-in-out",
     position: strategy,
     zIndex: 999,
+    marginTop: "8px",
+    width: "100%",
+    left: 0,
+    right: 0,
+    minWidth: "360px",
     pointerEvents: isOpen ? "auto" : "none",
   };
 
@@ -94,12 +101,13 @@ export const DatePicker = ({
           setIsOpen(false);
         }}
         onCancel={() => setIsOpen(false)}
+        {...calendarProps}
       />
     </Modal>
   );
 
   return (
-    <>
+    <div style={{ position: "relative", fontFamily: "Vazirmatn FD" }}>
       <div ref={setInputRef}>
         <input
           ref={reference}
@@ -119,7 +127,20 @@ export const DatePicker = ({
           {...props}
         />
       </div>
+      <div
+        style={{
+          position: "absolute",
+          backgroundColor: "#fff",
+          color: "#777",
+          padding: "0 0.25rem",
+          transition: "all 0.1s",
+          pointerEvents: "none",
+          ...(date ? { top: "-0.75rem", right: "0rem", transform: "scale(0.7)", opacity: 1 } : { top: "0.5rem", right: "0.5rem", opacity: 1 }),
+        }}
+      >
+        {placeholder}
+      </div>
       {calendarModal ? CalendarModalComponent : CalendarComponent}
-    </>
+    </div>
   );
 };
