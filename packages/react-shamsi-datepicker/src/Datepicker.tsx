@@ -68,7 +68,7 @@ export const DatePicker = ({
     transition: "opacity 0.15s ease-in-out, transform 0.15s ease-in-out",
     position: strategy,
     zIndex: 999,
-    marginTop: "8px",
+    marginTop: "6px",
     width: "100%",
     left: 0,
     right: 0,
