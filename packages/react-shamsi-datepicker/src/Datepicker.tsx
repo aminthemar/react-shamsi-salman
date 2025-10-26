@@ -17,6 +17,7 @@ interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   date?: Date;
   placeholder?: string;
   dateFormat?: string;
+  fontFamily?: string;
   persianDigits?: boolean;
   calendarModal?: boolean;
 }
@@ -29,6 +30,7 @@ export const DatePicker = ({
   dateFormat = "yyyy/MM/dd hh:mm:ss aaa",
   date: controlledDate,
   placeholder = "",
+  fontFamily = "",
   persianDigits,
   calendarModal = false,
   ...props
@@ -107,7 +109,7 @@ export const DatePicker = ({
   );
 
   return (
-    <div style={{ position: "relative", fontFamily: "Vazirmatn FD" }}>
+    <div style={{ position: "relative", fontFamily: fontFamily }}>
       <div ref={setInputRef}>
         <input
           ref={reference}

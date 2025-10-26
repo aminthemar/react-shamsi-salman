@@ -50,6 +50,7 @@ const NewHomework = () => {
           date={inputDate}
           onChange={setInputDate}
           placeholder="تاریخ کوچک"
+          fontFamily="Vazirmatn FD"
           style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
           calendarProps={{
             minDate: minDate,
@@ -68,6 +69,7 @@ const NewHomework = () => {
           date={inputDate}
           onChange={setInputDate}
           placeholder="تاریخ بزرگ"
+          fontFamily="Vazirmatn FD"
           style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
           calendarProps={{
             minDate: minDate,
@@ -86,6 +88,7 @@ const NewHomework = () => {
           date={inputDate}
           onChange={setInputDate}
           placeholder="تاریخ مودال"
+          fontFamily="Vazirmatn FD"
           style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
           calendarProps={{
             minDate: minDate,
@@ -105,6 +108,7 @@ const NewHomework = () => {
           date={inputDate}
           onChange={setInputDate}
           placeholder="تاریخ تمام عرض"
+          fontFamily="Vazirmatn FD"
           style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
           calendarProps={{
             minDate: minDate,

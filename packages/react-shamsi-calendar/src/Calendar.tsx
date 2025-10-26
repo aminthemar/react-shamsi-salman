@@ -334,7 +334,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
       );
     }, [activeBody, activeDate, disabledDates, highlightToday, maxDate, minDate, activeDayChangeHandler, selectedDate, themeClasses]);
     return (
-      <div ref={ref} style={{ fontFamily: "Vazirmatn FD", ...style }} className="flex flex-col rounded-md shadow-lg overflow-hidden" dir="rtl">
+      <div ref={ref} style={{ fontFamily: "inherit", ...style }} className="flex flex-col rounded-md shadow-lg overflow-hidden" dir="rtl">
         <Header
           activeDate={activeDate}
           selectedDate={selectedDate}
