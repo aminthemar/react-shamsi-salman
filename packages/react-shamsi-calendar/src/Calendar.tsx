@@ -59,6 +59,7 @@ export interface ICalendarProps {
   showFooter?: boolean;
   disableTransitions?: boolean;
   bodyTransition?: "zoomIn" | "zoomOut" | "fade";
+  defaultActiveBody?: "main" | "months" | "years";
   showFridaysAsRed?: boolean;
   showTimePicker?: boolean;
   months?: string[];
@@ -133,6 +134,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
       disabledDates,
       disableTransitions,
       bodyTransition = "zoomIn",
+      defaultActiveBody = "main",
       style,
       showFridaysAsRed = true,
       showTimePicker = true,
@@ -145,7 +147,7 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
   ) => {
     const [activeDate, setActiveDate] = useState(getInitialDate(defaultActiveDate, propActiveDate, minDate));
     const [selectedDate, setSelectedDate] = useState(activeDate);
-    const [activeBody, setActiveBody] = useState<"main" | "months" | "years">("main");
+    const [activeBody, setActiveBody] = useState<"main" | "months" | "years">(defaultActiveBody);
     const [mode, setMode] = useState<CalendarModes>("date");
     const [hour, setHour] = useState(propActiveDate?.getHours() || defaultActiveDate?.getHours() || 0);
     const [minute, setMinute] = useState(propActiveDate?.getMinutes() || defaultActiveDate?.getMinutes() || 0);
@@ -187,10 +189,12 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
 
     const monthChangeHandler = (month: number) => {
       setSelectedDate((previousDate) => setMonth(previousDate, month));
+      goToPreviousBody();
     };
 
     const yearChangeHandler = (year: number) => {
       setSelectedDate((previousDate) => setYear(previousDate, year));
+      goToPreviousBody();
     };
 
     const cycleThroughBodies = () => {
@@ -208,10 +212,6 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
       setSelectedDate(activeDate);
       onChange?.(activeDate);
     }, [activeDate]);
-
-    useEffect(() => {
-      goToPreviousBody();
-    }, [selectedDate]);
 
     const compareMinDate = () => {
       if (!minDate) return false;

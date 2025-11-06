@@ -78,33 +78,37 @@ export const DatePicker = ({
 
   const CalendarComponent = (
     <div ref={setCalendarRef} style={popupStyle}>
-      <Calendar
-        activeDate={date}
-        onChange={(newDate) => autoUpdate && updateDateHandler(newDate)}
-        showFooter
-        onConfirm={(newDate) => {
-          updateDateHandler(newDate);
-          setIsOpen(false);
-        }}
-        onCancel={() => setIsOpen(false)}
-        {...calendarProps}
-      />
+      {isOpen && (
+        <Calendar
+          activeDate={date}
+          onChange={(newDate) => autoUpdate && updateDateHandler(newDate)}
+          showFooter
+          onConfirm={(newDate) => {
+            updateDateHandler(newDate);
+            setIsOpen(false);
+          }}
+          onCancel={() => setIsOpen(false)}
+          {...calendarProps}
+        />
+      )}
     </div>
   );
 
   const CalendarModalComponent = (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <Calendar
-        activeDate={date}
-        onChange={(newDate) => autoUpdate && updateDateHandler(newDate)}
-        showFooter
-        onConfirm={(newDate) => {
-          updateDateHandler(newDate);
-          setIsOpen(false);
-        }}
-        onCancel={() => setIsOpen(false)}
-        {...calendarProps}
-      />
+      {isOpen && (
+        <Calendar
+          activeDate={date}
+          onChange={(newDate) => autoUpdate && updateDateHandler(newDate)}
+          showFooter
+          onConfirm={(newDate) => {
+            updateDateHandler(newDate);
+            setIsOpen(false);
+          }}
+          onCancel={() => setIsOpen(false)}
+          {...calendarProps}
+        />
+      )}
     </Modal>
   );
 
