@@ -470,7 +470,7 @@
     fastq "^1.6.0"
 
 "@react-shamsi-salmanfood/calendar@*", "@react-shamsi-salmanfood/calendar@file:D:\\Salman\\react-shamsi-salman\\react-shamsi-salman\\packages\\react-shamsi-calendar":
-  version "2.1.4"
+  version "2.1.5"
   resolved "file:packages/react-shamsi-calendar"
   dependencies:
     "@headlessui/react" "^1.7.3"
@@ -481,7 +481,7 @@
     react-transition-group "^4.4.5"
 
 "@react-shamsi-salmanfood/datepicker@file:D:\\Salman\\react-shamsi-salman\\react-shamsi-salman\\packages\\react-shamsi-datepicker":
-  version "2.1.4"
+  version "2.1.5"
   resolved "file:packages/react-shamsi-datepicker"
   dependencies:
     "@floating-ui/react-dom" "^1.0.0"
@@ -494,7 +494,7 @@
     persian-helpers "^0.1.2"
 
 "@react-shamsi/calendar@*":
-  version "2.1.4"
+  version "2.1.5"
   resolved "file:packages/react-shamsi-calendar"
   dependencies:
     "@headlessui/react" "^1.7.3"
@@ -505,7 +505,7 @@
     react-transition-group "^4.4.5"
 
 "@react-shamsi/datepicker@*":
-  version "2.1.4"
+  version "2.1.5"
   resolved "file:packages/react-shamsi-datepicker"
   dependencies:
     "@floating-ui/react-dom" "^1.0.0"
