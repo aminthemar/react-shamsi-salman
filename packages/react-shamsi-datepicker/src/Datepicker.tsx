@@ -25,7 +25,7 @@ interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
 }
 
 export const DatePicker = ({
-  autoUpdate,
+  autoUpdate = true,
   canType = false,
   calendarProps,
   onChange,
@@ -52,7 +52,14 @@ export const DatePicker = ({
   const [calendarRef, setCalendarRef] = useState<any>(null);
   const [typingDate, setTypingDate] = useState("");
 
-  useClickOutside(() => setIsOpen(false), null, [calendarRef, inputRef]);
+  useClickOutside(
+    () => {
+      if (canType) submitTypingDate(typingDate);
+      setIsOpen(false);
+    },
+    null,
+    [calendarRef, inputRef]
+  );
 
   const updateDateHandler = (newDate: Date) => {
     if (!controlledDate) setDate(newDate);
@@ -97,13 +104,14 @@ export const DatePicker = ({
       {isOpen && (
         <Calendar
           activeDate={date}
-          onChange={(newDate) => autoUpdate && updateDateHandler(newDate)}
           showFooter
           onConfirm={(newDate) => {
             updateDateHandler(newDate);
             setIsOpen(false);
           }}
-          onCancel={() => setIsOpen(false)}
+          onCancel={() => {
+            setIsOpen(false);
+          }}
           {...calendarProps}
         />
       )}
@@ -115,7 +123,6 @@ export const DatePicker = ({
       {isOpen && (
         <Calendar
           activeDate={date}
-          onChange={(newDate) => autoUpdate && updateDateHandler(newDate)}
           showFooter
           onConfirm={(newDate) => {
             updateDateHandler(newDate);
@@ -146,22 +153,46 @@ export const DatePicker = ({
     return formatted;
   }
 
-  const validateFormattedInput = (formatted: string) => {
-    const expectedLength = dateFormat.length;
+  const validateFormattedInput = (dateString: string) => {
+    const invalidChars = dateString.split("").some((char) => char !== separator && !/\d/.test(char));
+    if (invalidChars) return "";
+    const parts = dateString.split(separator);
     const formatParts = dateFormat.split(separator);
-    if (formatted.length === expectedLength) {
-      const [yearPart, monthPart, dayPart] = formatParts.map((p, i) => formatted.split(separator)[i]);
-      const year = parseInt(yearPart, 10);
-      const month = parseInt(monthPart, 10);
-      const day = parseInt(dayPart, 10);
-      return yearPart.length === 4 && month >= 1 && month <= 12 && day >= 1 && day <= 31;
-    }
+    const normalizedParts = parts.map((part, index) => {
+      const formatPart = formatParts[index];
+      if (formatPart.length === 2 && part.length === 1) {
+        return `0${part}`;
+      }
+      return part;
+    });
+    const normalizedDateString = normalizedParts.join(separator);
+    const formatPattern = dateFormat.replace("yyyy", "\\d{4}").replace("MM", "\\d{2}").replace("dd", "\\d{2}");
+    const regex = new RegExp(`^${formatPattern}$`);
+    if (!regex.test(normalizedDateString)) return "";
+    const [yearPart, monthPart, dayPart] = normalizedDateString.split(separator);
+    const year = parseInt(yearPart, 10);
+    const month = parseInt(monthPart, 10);
+    const day = parseInt(dayPart, 10);
+    if (yearPart.length === 4 && month >= 1 && month <= 12 && day >= 1 && day <= 31) return normalizedDateString;
+    else return "";
   };
 
   function parseJalaliDate(dateString: string) {
     const date = parse(dateString, dateFormat, new Date());
     return isValid(date) ? date : null;
   }
+
+  const submitTypingDate = (formatted: string) => {
+    const result = validateFormattedInput(formatted);
+    if (result) {
+      const formatedDateObj = parseJalaliDate(result);
+      if (formatedDateObj) {
+        updateDateHandler(formatedDateObj);
+        setIsOpen(false);
+      }
+      setTypingDate(result);
+    }
+  };
 
   return (
     <div style={{ position: "relative", fontFamily: fontFamily }}>
@@ -171,6 +202,11 @@ export const DatePicker = ({
           className="p-2 rounded-md border border-gray-300"
           value={typingDate}
           readOnly={!canType}
+          onKeyDown={(event) => {
+            if (canType && event.key === "Enter") {
+              submitTypingDate(typingDate);
+            }
+          }}
           onChange={(event) => {
             const isDeleting = event.target.value.length < typingDate.length;
             if (isDeleting) {
@@ -180,13 +216,7 @@ export const DatePicker = ({
             const digits = event.target.value.replace(/\D/g, "");
             const formatted = formatDateFromDigits(digits);
             setTypingDate(formatted);
-            if (validateFormattedInput(formatted)) {
-              const formatedDateObj = parseJalaliDate(formatted);
-              if (formatedDateObj) {
-                updateDateHandler(formatedDateObj);
-                setIsOpen(false);
-              }
-            }
+            if (dateFormat.length === formatted.length) submitTypingDate(formatted);
           }}
           onClick={(event) => {
             setIsOpen(true);
