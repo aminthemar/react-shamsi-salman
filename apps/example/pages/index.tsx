@@ -25,6 +25,7 @@ const theme = {
 };
 
 const NewHomework = () => {
+  const [inputDate, setInputDate] = useState<Date>();
   const [minDate, setMinDate] = useState<Date>();
   const minDatePlusOne = useMemo(() => {
     if (!minDate) return undefined;
@@ -36,8 +37,6 @@ const NewHomework = () => {
   useEffect(() => {
     if (minDatePlusOne && inputDate && minDate && inputDate <= minDate) setInputDate(minDatePlusOne);
   }, [minDate]);
-
-  const [inputDate, setInputDate] = useState<Date>();
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem", padding: "2rem", direction: "rtl", minHeight: "100vh" }}>
@@ -61,7 +60,7 @@ const NewHomework = () => {
       </div>
       {/* SMALL DATEPICKER */}
       {/* LARGE DATEPICKER */}
-      <div style={{ width: "400px" }}>
+      <div style={{ width: "360px" }}>
         <DatePicker
           autoUpdate
           dateFormat="yyyy/MM/dd"
@@ -79,8 +78,29 @@ const NewHomework = () => {
         />
       </div>
       {/* LARGE DATEPICKER */}
+      {/* TYPE DATEPICKER */}
+      <div style={{ width: "360px" }}>
+        <DatePicker
+          autoUpdate
+          canType
+          dateFormat="yyyy/MM/dd"
+          className="w-full p-2 border rounded border-gray-300"
+          date={inputDate}
+          onChange={setInputDate}
+          placeholder="تاریخ تایپی"
+          fontFamily="Vazirmatn FD"
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          calendarProps={{
+            minDate: minDate,
+            showTimePicker: false,
+            theme: theme,
+          }}
+          calendarModal
+        />
+      </div>
+      {/* TYPE DATEPICKER */}
       {/* MODAL DATEPICKER */}
-      <div style={{ width: "50%" }}>
+      <div style={{ width: "360px" }}>
         <DatePicker
           autoUpdate
           dateFormat="yyyy/MM/dd"

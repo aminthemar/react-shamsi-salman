@@ -3,7 +3,8 @@ import { useClickOutside } from "@mantine/hooks";
 import { Calendar, ICalendarProps } from "@react-shamsi-salmanfood/calendar";
 import { format } from "date-fns-jalali";
 import { convertDigits } from "persian-helpers";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { parse, isValid } from "date-fns-jalali";
 import Modal from "./Modal";
 
 interface DatePickerOnChange {
@@ -12,6 +13,7 @@ interface DatePickerOnChange {
 
 interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">, DatePickerOnChange {
   autoUpdate?: boolean;
+  canType?: boolean;
   defaultDate?: Date;
   calendarProps?: ICalendarProps;
   date?: Date;
@@ -24,6 +26,7 @@ interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
 
 export const DatePicker = ({
   autoUpdate,
+  canType = false,
   calendarProps,
   onChange,
   defaultDate,
@@ -42,10 +45,12 @@ export const DatePicker = ({
     whileElementsMounted: floatingUiAutoUpdate,
   });
 
+  const separator = "/";
   const [date, setDate] = useState(defaultDate || controlledDate);
   const [isOpen, setIsOpen] = useState(false);
   const [inputRef, setInputRef] = useState<any>(null);
   const [calendarRef, setCalendarRef] = useState<any>(null);
+  const [typingDate, setTypingDate] = useState("");
 
   useClickOutside(() => setIsOpen(false), null, [calendarRef, inputRef]);
 
@@ -56,10 +61,21 @@ export const DatePicker = ({
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
+
   useEffect(() => {
     if (!isMounted) return;
     setDate(controlledDate);
   }, [controlledDate]);
+
+  useEffect(() => {
+    setTypingDate(
+      controlledDate
+        ? convertDigits(format(controlledDate, dateFormat), {
+            to: persianDigits ? "fa" : "en",
+          })
+        : ""
+    );
+  }, [date]);
 
   // Inline styles for smooth pop-up animation
   const popupStyle: React.CSSProperties = {
@@ -112,23 +128,74 @@ export const DatePicker = ({
     </Modal>
   );
 
+  function formatDateFromDigits(input: string) {
+    const formatParts = dateFormat.split(separator);
+    let formatted = "";
+    let index = 0;
+    for (let i = 0; i < formatParts.length; i++) {
+      const partLength = formatParts[i].length;
+      if (input.length > index) {
+        const chunk = input.substring(index, index + partLength);
+        formatted += chunk;
+        if (chunk.length === partLength && i < formatParts.length - 1) {
+          formatted += separator;
+        }
+        index += chunk.length;
+      }
+    }
+    return formatted;
+  }
+
+  const validateFormattedInput = (formatted: string) => {
+    const expectedLength = dateFormat.length;
+    const formatParts = dateFormat.split(separator);
+    if (formatted.length === expectedLength) {
+      const [yearPart, monthPart, dayPart] = formatParts.map((p, i) => formatted.split(separator)[i]);
+      const year = parseInt(yearPart, 10);
+      const month = parseInt(monthPart, 10);
+      const day = parseInt(dayPart, 10);
+      return yearPart.length === 4 && month >= 1 && month <= 12 && day >= 1 && day <= 31;
+    }
+  };
+
+  function parseJalaliDate(dateString: string) {
+    const date = parse(dateString, dateFormat, new Date());
+    return isValid(date) ? date : null;
+  }
+
   return (
     <div style={{ position: "relative", fontFamily: fontFamily }}>
-      <div ref={setInputRef}>
+      <div ref={setInputRef} style={{ direction: "ltr" }}>
         <input
           ref={reference}
           className="p-2 rounded-md border border-gray-300"
-          value={
-            date
-              ? convertDigits(format(date, dateFormat), {
-                  to: persianDigits ? "fa" : "en",
-                })
-              : ""
-          }
-          readOnly
+          value={typingDate}
+          readOnly={!canType}
+          onChange={(event) => {
+            const isDeleting = event.target.value.length < typingDate.length;
+            if (isDeleting) {
+              setTypingDate(event.target.value);
+              return;
+            }
+            const digits = event.target.value.replace(/\D/g, "");
+            const formatted = formatDateFromDigits(digits);
+            setTypingDate(formatted);
+            if (validateFormattedInput(formatted)) {
+              const formatedDateObj = parseJalaliDate(formatted);
+              if (formatedDateObj) {
+                updateDateHandler(formatedDateObj);
+                setIsOpen(false);
+              }
+            }
+          }}
           onClick={(event) => {
             setIsOpen(true);
             props.onClick?.(event);
+          }}
+          onFocus={(event) => {
+            if (canType) {
+              event.target.select();
+            }
           }}
           {...props}
         />
@@ -141,12 +208,12 @@ export const DatePicker = ({
           padding: "0 0.25rem",
           transition: "all 0.1s",
           pointerEvents: "none",
-          ...(date ? { top: "-0.75rem", right: "0rem", transform: "scale(0.7)", opacity: 1 } : { top: "0.5rem", right: "0.5rem", opacity: 1 }),
+          ...(date ? { top: "-0.75rem", right: "0rem", transform: "scale(0.7)", opacity: 1 } : { top: "0.375rem", right: "0.5rem", opacity: 1 }),
         }}
       >
         {placeholder}
       </div>
-      {calendarModal ? CalendarModalComponent : CalendarComponent}
+      {!canType && calendarModal ? CalendarModalComponent : CalendarComponent}
     </div>
   );
 };
