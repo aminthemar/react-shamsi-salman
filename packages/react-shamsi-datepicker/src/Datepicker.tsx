@@ -214,12 +214,7 @@ export const DatePicker = ({
           onKeyDown={(event) => {
             if (canType && event.key === "Enter") {
               const success = submitTypingDate(typingDate);
-              if (success) {
-                setIsOpen(false);
-                setTimeout(() => {
-                  setIsOpen(true);
-                }, 200);
-              }
+              if (success) setIsOpen(false);
             }
           }}
           onChange={(event) => {
