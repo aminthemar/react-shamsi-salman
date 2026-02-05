@@ -481,7 +481,7 @@
     react-transition-group "^4.4.5"
 
 "@react-shamsi-salmanfood/datepicker@file:D:\\Salman\\react-shamsi-salman\\react-shamsi-salman\\packages\\react-shamsi-datepicker":
-  version "2.1.10"
+  version "2.2.0"
   resolved "file:packages/react-shamsi-datepicker"
   dependencies:
     "@floating-ui/react-dom" "^1.0.0"
@@ -505,7 +505,7 @@
     react-transition-group "^4.4.5"
 
 "@react-shamsi/datepicker@*":
-  version "2.1.10"
+  version "2.2.0"
   resolved "file:packages/react-shamsi-datepicker"
   dependencies:
     "@floating-ui/react-dom" "^1.0.0"

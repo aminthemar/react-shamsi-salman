@@ -193,10 +193,11 @@ export const DatePicker = ({
       const formatedDateObj = parseJalaliDate(result);
       if (formatedDateObj) {
         updateDateHandler(formatedDateObj);
-        setIsOpen(false);
+        return true;
       }
       setTypingDate(result);
     }
+    return false;
   };
 
   return (
@@ -212,7 +213,13 @@ export const DatePicker = ({
           }}
           onKeyDown={(event) => {
             if (canType && event.key === "Enter") {
-              submitTypingDate(typingDate);
+              const success = submitTypingDate(typingDate);
+              if (success) {
+                setIsOpen(false);
+                setTimeout(() => {
+                  setIsOpen(true);
+                }, 200);
+              }
             }
           }}
           onChange={(event) => {
@@ -223,7 +230,15 @@ export const DatePicker = ({
             }
             const formatted = formatDateFromInput(event.target.value);
             setTypingDate(formatted);
-            if (dateFormat.length === formatted.length) submitTypingDate(formatted);
+            if (dateFormat.length === formatted.length) {
+              const success = submitTypingDate(formatted);
+              if (success) {
+                setIsOpen(false);
+                setTimeout(() => {
+                  setIsOpen(true);
+                }, 200);
+              }
+            }
           }}
           onClick={(event) => {
             setIsOpen(true);

@@ -1,6 +1,6 @@
 {
   "name": "@react-shamsi-salmanfood/datepicker",
-  "version": "2.1.10",
+  "version": "2.2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
