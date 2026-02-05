@@ -18,7 +18,6 @@ interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   calendarProps?: ICalendarProps;
   date?: Date;
   placeholder?: string;
-  dateFormat?: string;
   fontFamily?: string;
   persianDigits?: boolean;
   calendarModal?: boolean;
@@ -30,7 +29,6 @@ export const DatePicker = ({
   calendarProps,
   onChange,
   defaultDate,
-  dateFormat = "yyyy/MM/dd hh:mm:ss aaa",
   date: controlledDate,
   placeholder = "",
   fontFamily = "",
@@ -46,43 +44,45 @@ export const DatePicker = ({
   });
 
   const separator = "/";
-  const [date, setDate] = useState(defaultDate || controlledDate);
+  const dateFormat = "yyyy/MM/dd";
+  const [date, setDate] = useState(controlledDate || defaultDate);
   const [isOpen, setIsOpen] = useState(false);
-  const [inputRef, setInputRef] = useState<any>(null);
   const [calendarRef, setCalendarRef] = useState<any>(null);
-  const [typingDate, setTypingDate] = useState("");
-
-  useClickOutside(
-    () => {
-      if (canType) submitTypingDate(typingDate);
-      setIsOpen(false);
-    },
-    null,
-    [calendarRef, inputRef]
+  const [typingDate, setTypingDate] = useState(
+    defaultDate
+      ? convertDigits(format(defaultDate, dateFormat), {
+          to: persianDigits ? "fa" : "en",
+        })
+      : ""
   );
 
-  const updateDateHandler = (newDate: Date) => {
-    if (!controlledDate) setDate(newDate);
-    onChange?.(newDate);
-  };
+  useClickOutside(() => setIsOpen(false), null, [calendarRef]);
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
-
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || !controlledDate) return;
     setDate(controlledDate);
-  }, [controlledDate]);
-
-  useEffect(() => {
     setTypingDate(
-      controlledDate
-        ? convertDigits(format(controlledDate, dateFormat), {
-            to: persianDigits ? "fa" : "en",
-          })
-        : ""
+      convertDigits(format(controlledDate, dateFormat), {
+        to: persianDigits ? "fa" : "en",
+      })
     );
-  }, [date]);
+  }, [controlledDate, isMounted]);
+
+  const updateDateHandler = (newDate: Date) => {
+    if (!controlledDate) {
+      setDate(newDate);
+      setTypingDate(
+        newDate
+          ? convertDigits(format(newDate, dateFormat), {
+              to: persianDigits ? "fa" : "en",
+            })
+          : ""
+      );
+    }
+    onChange?.(newDate);
+  };
 
   // Inline styles for smooth pop-up animation
   const popupStyle: React.CSSProperties = {
@@ -135,14 +135,19 @@ export const DatePicker = ({
     </Modal>
   );
 
-  function formatDateFromDigits(input: string) {
+  function formatDateFromInput(input: string) {
+    const separatorEscaped = separator.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const cleanDate = input.replace(new RegExp(`[^\\d${separatorEscaped}]`, "g"), "");
+    if (!/^(\d{4}(\/\d{2}(\/\d{2})?)?)?$/.test(cleanDate)) return cleanDate.slice(0, dateFormat.length);
+
+    const digits = cleanDate.replace(/\D/g, "");
     const formatParts = dateFormat.split(separator);
     let formatted = "";
     let index = 0;
     for (let i = 0; i < formatParts.length; i++) {
       const partLength = formatParts[i].length;
-      if (input.length > index) {
-        const chunk = input.substring(index, index + partLength);
+      if (digits.length > index) {
+        const chunk = digits.substring(index, index + partLength);
         formatted += chunk;
         if (chunk.length === partLength && i < formatParts.length - 1) {
           formatted += separator;
@@ -196,12 +201,15 @@ export const DatePicker = ({
 
   return (
     <div style={{ position: "relative", fontFamily: fontFamily }}>
-      <div ref={setInputRef} style={{ direction: "ltr" }}>
+      <div style={{ direction: "ltr" }}>
         <input
           ref={reference}
           className="p-2 rounded-md border border-gray-300"
           value={typingDate}
           readOnly={!canType}
+          onBlur={() => {
+            submitTypingDate(typingDate);
+          }}
           onKeyDown={(event) => {
             if (canType && event.key === "Enter") {
               submitTypingDate(typingDate);
@@ -213,8 +221,7 @@ export const DatePicker = ({
               setTypingDate(event.target.value);
               return;
             }
-            const digits = event.target.value.replace(/\D/g, "");
-            const formatted = formatDateFromDigits(digits);
+            const formatted = formatDateFromInput(event.target.value);
             setTypingDate(formatted);
             if (dateFormat.length === formatted.length) submitTypingDate(formatted);
           }}
@@ -238,7 +245,7 @@ export const DatePicker = ({
           padding: "0 0.25rem",
           transition: "all 0.1s",
           pointerEvents: "none",
-          ...(date ? { top: "-0.75rem", right: "0rem", transform: "scale(0.7)", opacity: 1 } : { top: "0.375rem", right: "0.5rem", opacity: 1 }),
+          ...(typingDate || date ? { top: "-0.75rem", right: "0rem", transform: "scale(0.7)", opacity: 1 } : { top: "0.375rem", right: "0.5rem", opacity: 1 }),
         }}
       >
         {placeholder}

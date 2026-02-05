@@ -44,7 +44,6 @@ const NewHomework = () => {
       <div style={{ width: "200px" }}>
         <DatePicker
           autoUpdate
-          dateFormat="yyyy/MM/dd"
           className="w-full p-2 border rounded border-gray-300"
           date={inputDate}
           onChange={setInputDate}
@@ -63,7 +62,6 @@ const NewHomework = () => {
       <div style={{ width: "360px" }}>
         <DatePicker
           autoUpdate
-          dateFormat="yyyy/MM/dd"
           className="w-full p-2 border rounded border-gray-300"
           date={inputDate}
           onChange={setInputDate}
@@ -83,7 +81,6 @@ const NewHomework = () => {
         <DatePicker
           autoUpdate
           canType
-          dateFormat="yyyy/MM/dd"
           className="w-full p-2 border rounded border-gray-300"
           date={inputDate}
           onChange={setInputDate}
@@ -103,7 +100,6 @@ const NewHomework = () => {
       <div style={{ width: "360px" }}>
         <DatePicker
           autoUpdate
-          dateFormat="yyyy/MM/dd"
           className="w-full p-2 border rounded border-gray-300"
           date={inputDate}
           onChange={setInputDate}
@@ -123,7 +119,6 @@ const NewHomework = () => {
       <div style={{ width: "100%" }}>
         <DatePicker
           autoUpdate
-          dateFormat="yyyy/MM/dd"
           className="w-full p-2 border rounded border-gray-300"
           date={inputDate}
           onChange={setInputDate}
