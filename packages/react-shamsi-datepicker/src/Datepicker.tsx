@@ -1,10 +1,10 @@
-import { autoUpdate as floatingUiAutoUpdate, flip, shift, useFloating } from "@floating-ui/react-dom";
+import { flip, autoUpdate as floatingUiAutoUpdate, shift, useFloating } from "@floating-ui/react-dom";
 import { useClickOutside } from "@mantine/hooks";
 import { Calendar, ICalendarProps } from "@react-shamsi-salmanfood/calendar";
-import { format } from "date-fns-jalali";
+import { IconCalendar, IconSwitchVertical } from "@tabler/icons";
+import { format, isValid, parse } from "date-fns-jalali";
 import { convertDigits } from "persian-helpers";
-import { useEffect, useMemo, useState } from "react";
-import { parse, isValid } from "date-fns-jalali";
+import { useEffect, useState } from "react";
 import Modal from "./Modal";
 
 interface DatePickerOnChange {
@@ -213,8 +213,8 @@ export const DatePicker = ({
           }}
           onKeyDown={(event) => {
             if (canType && event.key === "Enter") {
-              const success = submitTypingDate(typingDate);
-              if (success) setIsOpen(false);
+              submitTypingDate(typingDate);
+              setIsOpen(false);
             }
           }}
           onChange={(event) => {
@@ -226,16 +226,12 @@ export const DatePicker = ({
             const formatted = formatDateFromInput(event.target.value);
             setTypingDate(formatted);
             if (dateFormat.length === formatted.length) {
-              const success = submitTypingDate(formatted);
-              if (success) {
-                setIsOpen(false);
-                setTimeout(() => {
-                  setIsOpen(true);
-                }, 200);
-              }
+              submitTypingDate(formatted);
+              setIsOpen(false);
             }
           }}
           onClick={(event) => {
+            if (canType) return;
             setIsOpen(true);
             props.onClick?.(event);
           }}
@@ -260,7 +256,27 @@ export const DatePicker = ({
       >
         {placeholder}
       </div>
-      {!canType && calendarModal ? CalendarModalComponent : CalendarComponent}
+      {canType && (
+        <div
+          className="absolute"
+          style={{ top: "5px", left: "5px", bottom: "5px", cursor: "pointer" }}
+          onClick={(event) => {
+            setIsOpen(true);
+            props.onClick?.(event as React.MouseEvent<HTMLInputElement>);
+          }}
+        >
+          <IconCalendar
+            style={{
+              borderRadius: "2px",
+              width: "26px",
+              height: "26px",
+              padding: "0.25rem",
+              color: (calendarProps?.theme as any)?.footerButtonColor || "#119ef6",
+            }}
+          />
+        </div>
+      )}
+      {calendarModal ? CalendarModalComponent : CalendarComponent}
     </div>
   );
 };

@@ -92,7 +92,7 @@ const NewHomework = () => {
             showTimePicker: false,
             theme: theme,
           }}
-          calendarModal
+          // calendarModal
         />
       </div>
       {/* TYPE DATEPICKER */}
