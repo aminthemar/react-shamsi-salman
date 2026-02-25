@@ -17,8 +17,9 @@ interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   defaultDate?: Date;
   calendarProps?: ICalendarProps;
   date?: Date;
-  placeholder?: string;
-  placeholderStyles?: React.CSSProperties;
+  inputClassName?: string;
+  label?: string;
+  labelStyles?: React.CSSProperties;
   fontFamily?: string;
   persianDigits?: boolean;
   calendarModal?: boolean;
@@ -26,13 +27,14 @@ interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
 
 export const DatePicker = ({
   autoUpdate = true,
-  canType = false,
+  canType = true,
   calendarProps,
   onChange,
   defaultDate,
   date: controlledDate,
-  placeholder = "",
-  placeholderStyles = {},
+  inputClassName = "",
+  label = "",
+  labelStyles = {},
   fontFamily = "",
   persianDigits,
   calendarModal = false,
@@ -204,10 +206,14 @@ export const DatePicker = ({
 
   return (
     <div style={{ position: "relative", fontFamily: fontFamily }}>
+      <style>{`
+      .rssf-datepicker-input:focus-visible {
+        outline: ${(calendarProps?.theme as any)?.headerBackgroundColor || "#119ef6"} auto 1px !important;
+      }`}</style>
       <div style={{ direction: "ltr" }}>
         <input
           ref={reference}
-          className="p-2 rounded-md border border-gray-300"
+          className={`p-2 rounded border border-gray-300 rssf-datepicker-input ${inputClassName}`}
           value={typingDate}
           readOnly={!canType}
           onBlur={() => {
@@ -247,27 +253,25 @@ export const DatePicker = ({
       </div>
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
           position: "absolute",
           backgroundColor: "#fff",
           color: "#777",
           padding: "0 0.25rem",
           transition: "all 0.1s",
           pointerEvents: "none",
-          top: "-0.75rem",
-          right: "0rem",
-          transform: "scale(0.7)",
+          top: "-0.375rem",
+          right: "0.375rem",
+          fontSize: "0.75rem",
           opacity: 1,
-          ...placeholderStyles,
+          ...labelStyles,
         }}
       >
-        {placeholder}
+        {label}
       </div>
       {canType && (
         <div
           className="flex items-center absolute"
-          style={{ top: "5px", left: "5px", bottom: "5px", cursor: "pointer" }}
+          style={{ top: "5px", left: "5px", bottom: "6px", cursor: "pointer" }}
           onClick={(event) => {
             setIsOpen(true);
             props.onClick?.(event as React.MouseEvent<HTMLInputElement>);
@@ -279,7 +283,7 @@ export const DatePicker = ({
               width: "26px",
               height: "26px",
               padding: "0.25rem",
-              color: (calendarProps?.theme as any)?.footerButtonColor || "#119ef6",
+              color: (calendarProps?.theme as any)?.headerBackgroundColor || "#119ef6",
             }}
           />
         </div>

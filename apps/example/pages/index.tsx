@@ -44,12 +44,13 @@ const NewHomework = () => {
       <div style={{ width: "200px" }}>
         <DatePicker
           autoUpdate
-          className="w-full p-2 border rounded border-gray-300"
+          inputClassName="w-full"
           date={inputDate}
           onChange={setInputDate}
-          placeholder="تاریخ کوچک"
+          label="تاریخ"
+          placeholder="1404/04/04"
           fontFamily="Vazirmatn FD"
-          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "40px", textAlign: "center" }}
           calendarProps={{
             minDate: minDate,
             showTimePicker: false,
@@ -62,12 +63,13 @@ const NewHomework = () => {
       <div style={{ width: "360px" }}>
         <DatePicker
           autoUpdate
-          className="w-full p-2 border rounded border-gray-300"
+          inputClassName="w-full"
           date={inputDate}
           onChange={setInputDate}
-          placeholder="تاریخ بزرگ"
+          label="تاریخ بزرگ"
+          placeholder="1404/04/04"
           fontFamily="Vazirmatn FD"
-          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "40px", textAlign: "center" }}
           calendarProps={{
             minDate: minDate,
             showTimePicker: false,
@@ -76,36 +78,17 @@ const NewHomework = () => {
         />
       </div>
       {/* LARGE DATEPICKER */}
-      {/* TYPE DATEPICKER */}
-      <div style={{ width: "360px" }}>
-        <DatePicker
-          autoUpdate
-          canType
-          className="w-full p-2 border rounded border-gray-300"
-          date={inputDate}
-          onChange={setInputDate}
-          placeholder="تاریخ تایپی"
-          fontFamily="Vazirmatn FD"
-          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
-          calendarProps={{
-            minDate: minDate,
-            showTimePicker: false,
-            theme: theme,
-          }}
-          // calendarModal
-        />
-      </div>
-      {/* TYPE DATEPICKER */}
       {/* MODAL DATEPICKER */}
       <div style={{ width: "360px" }}>
         <DatePicker
           autoUpdate
-          className="w-full p-2 border rounded border-gray-300"
+          inputClassName="w-full"
           date={inputDate}
           onChange={setInputDate}
-          placeholder="تاریخ مودال"
+          label="تاریخ مودال"
+          placeholder="1404/04/04"
           fontFamily="Vazirmatn FD"
-          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "40px", textAlign: "center" }}
           calendarProps={{
             minDate: minDate,
             showTimePicker: false,
@@ -115,16 +98,58 @@ const NewHomework = () => {
         />
       </div>
       {/* MODAL DATEPICKER */}
+      {/* NO TYPE DATEPICKER */}
+      <div style={{ width: "360px" }}>
+        <DatePicker
+          autoUpdate
+          canType={false}
+          inputClassName="w-full"
+          date={inputDate}
+          onChange={setInputDate}
+          label="تاریخ بدون تایپ"
+          placeholder="1404/04/04"
+          fontFamily="Vazirmatn FD"
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "40px", textAlign: "center" }}
+          calendarProps={{
+            minDate: minDate,
+            showTimePicker: false,
+            theme: theme,
+          }}
+        />
+      </div>
+      {/* NO TYPE DATEPICKER */}
+      {/* NO TYPE MODAL DATEPICKER */}
+      <div style={{ width: "360px" }}>
+        <DatePicker
+          autoUpdate
+          canType={false}
+          inputClassName="w-full"
+          date={inputDate}
+          onChange={setInputDate}
+          label="تاریخ بدون تایپ مودال"
+          placeholder="1404/04/04"
+          fontFamily="Vazirmatn FD"
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "40px", textAlign: "center" }}
+          calendarProps={{
+            minDate: minDate,
+            showTimePicker: false,
+            theme: theme,
+          }}
+          calendarModal
+        />
+      </div>
+      {/* NO TYPE MODAL DATEPICKER */}
       {/* FULL WIDTH DATEPICKER */}
       <div style={{ width: "100%" }}>
         <DatePicker
           autoUpdate
-          className="w-full p-2 border rounded border-gray-300"
+          inputClassName="w-full"
           date={inputDate}
           onChange={setInputDate}
-          placeholder="تاریخ تمام عرض"
+          label="تاریخ تمام عرض"
+          placeholder="1404/04/04"
           fontFamily="Vazirmatn FD"
-          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "36px", textAlign: "center" }}
+          style={{ width: "100%", fontSize: "15px", paddingRight: "0.75rem", height: "40px", textAlign: "center" }}
           calendarProps={{
             minDate: minDate,
             showTimePicker: false,

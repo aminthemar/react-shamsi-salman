@@ -358,8 +358,8 @@ export const Calendar = forwardRef<HTMLDivElement, ICalendarProps>(
                   style={{
                     backgroundColor: "#f3f4f6",
                     padding: "2px",
-                    borderColor: themeClasses.footerButtonColor,
-                    color: themeClasses.footerButtonColor,
+                    borderColor: themeClasses.headerBackgroundColor,
+                    color: themeClasses.headerBackgroundColor,
                   }}
                 />
               </button>
