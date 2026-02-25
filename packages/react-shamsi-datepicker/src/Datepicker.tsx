@@ -4,7 +4,7 @@ import { Calendar, ICalendarProps } from "@react-shamsi-salmanfood/calendar";
 import { IconCalendar, IconSwitchVertical } from "@tabler/icons";
 import { format, isValid, parse } from "date-fns-jalali";
 import { convertDigits } from "persian-helpers";
-import { useEffect, useState } from "react";
+import { StyleHTMLAttributes, useEffect, useState } from "react";
 import Modal from "./Modal";
 
 interface DatePickerOnChange {
@@ -18,6 +18,7 @@ interface IDatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   calendarProps?: ICalendarProps;
   date?: Date;
   placeholder?: string;
+  placeholderStyles?: React.CSSProperties;
   fontFamily?: string;
   persianDigits?: boolean;
   calendarModal?: boolean;
@@ -31,6 +32,7 @@ export const DatePicker = ({
   defaultDate,
   date: controlledDate,
   placeholder = "",
+  placeholderStyles = {},
   fontFamily = "",
   persianDigits,
   calendarModal = false,
@@ -245,20 +247,26 @@ export const DatePicker = ({
       </div>
       <div
         style={{
+          display: "flex",
+          alignItems: "center",
           position: "absolute",
           backgroundColor: "#fff",
           color: "#777",
           padding: "0 0.25rem",
           transition: "all 0.1s",
           pointerEvents: "none",
-          ...(typingDate || date ? { top: "-0.75rem", right: "0rem", transform: "scale(0.7)", opacity: 1 } : { top: "0.375rem", right: "0.5rem", opacity: 1 }),
+          top: "-0.75rem",
+          right: "0rem",
+          transform: "scale(0.7)",
+          opacity: 1,
+          ...placeholderStyles,
         }}
       >
         {placeholder}
       </div>
       {canType && (
         <div
-          className="absolute"
+          className="flex items-center absolute"
           style={{ top: "5px", left: "5px", bottom: "5px", cursor: "pointer" }}
           onClick={(event) => {
             setIsOpen(true);
